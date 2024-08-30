@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Screenshot Tagger</title>
+    <style>
+        #results {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .result-item {
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            margin: 5px;
+            width: calc(100% / 2 - 20px); /* Adjust based on how many items per row */
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .result-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+
+        button:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h3>Tag Your Screenshot</h3>
+    <input type="text" id="tags" placeholder="Enter tags...">
+    <textarea id="notes" placeholder="Add notes..."></textarea>
+
+    <button id="searchDocs">Search & Select Google Doc</button>
+    <div id="docResults" class="results"></div>
+
+    <button id="searchSheets">Search & Select Google Sheet</button>
+    <div id="sheetResults" class="results"></div>
+
+    <button id="insert">Insert into Google Doc</button>
+    <button id="insertSheet">Insert into Google Sheet</button>
+
+    <script src="popup.js"></script>
+</body>
+</html>

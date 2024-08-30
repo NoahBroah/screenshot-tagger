@@ -1,0 +1,37 @@
+{
+    "manifest_version": 3,
+    "name": "Screenshot Tagger",
+    "version": "1.0",
+    "description": "Capture screenshots, add tags, and insert into Google Docs or Sheets.",
+    "permissions": [
+      "fileSystem",
+      "identity",
+      "storage",
+      "activeTab",
+      "scripting",
+      "notifications"
+    ],
+    "oauth2": {
+      "client_id": "535986854348-8nhcmhrurcvu2loq7khfl2a3csarf32t.apps.googleusercontent.com",
+      "scopes": [
+        "https://www.googleapis.com/auth/documents",
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive.file"
+      ]
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "commands": {
+      "take_screenshot": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+S"
+        },
+        "description": "Take a screenshot and tag it"
+      }
+    }
+  }
+  
