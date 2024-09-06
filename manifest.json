@@ -12,13 +12,14 @@
       "notifications"
     ],
     "oauth2": {
-      "client_id": "535986854348-8nhcmhrurcvu2loq7khfl2a3csarf32t.apps.googleusercontent.com",
-      "scopes": [
-        "https://www.googleapis.com/auth/documents",
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive.file"
-      ]
-    },
+  "client_id": "535986854348-oifircmcjj4rna7vru43ta19rimjf73s.apps.googleusercontent.com",
+  "scopes": [
+    "https://www.googleapis.com/auth/documents",
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive.file",
+    "https://www.googleapis.com/auth/drive.readonly"
+  ]
+},
     "background": {
       "service_worker": "background.js"
     },
