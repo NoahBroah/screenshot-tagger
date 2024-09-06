@@ -1,3 +1,4 @@
+// Listener for commands such as capturing screenshots
 chrome.commands.onCommand.addListener((command) => {
     if (command === "take_screenshot") {
         // Ensure the current tab is active and not in incognito mode
@@ -48,13 +49,79 @@ chrome.commands.onCommand.addListener((command) => {
     }
 });
 
-// Listener for storage changes to log any changes (optional, useful for debugging)
+// Listener for storage changes (optional, for debugging)
 chrome.storage.onChanged.addListener((changes, namespace) => {
     for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
         console.log(
             `Storage key "${key}" in namespace "${namespace}" changed.`,
             `Old value was "${oldValue}", new value is "${newValue}".`
         );
+    }
+});
+
+// Function to authenticate and get OAuth token
+function getAuthToken(interactive) {
+    return new Promise((resolve, reject) => {
+        chrome.identity.getAuthToken({ interactive: interactive }, (token) => {
+            if (chrome.runtime.lastError || !token) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(token);
+            }
+        });
+    });
+}
+
+// Function to make an authorized API call to Google Docs API
+function makeApiCall(token, docId, screenshot) {
+    const apiUrl = `https://docs.googleapis.com/v1/documents/${docId}:batchUpdate`;
+    
+    const requestBody = {
+        requests: [
+            {
+                insertInlineImage: {
+                    location: { index: 1 },
+                    uri: screenshot,
+                    objectSize: {
+                        height: { magnitude: 100, unit: 'PT' },
+                        width: { magnitude: 100, unit: 'PT' }
+                    }
+                }
+            }
+        ]
+    };
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => response.json())
+    .then(data => console.log('Screenshot inserted into Google Doc:', data))
+    .catch(error => console.error('Error inserting screenshot:', error));
+}
+
+// Main function to initiate OAuth and make the API call with docId and screenshot
+function authenticateAndInsertIntoDoc(docId, screenshot) {
+    getAuthToken(true)
+        .then(token => {
+            console.log('Token:', token);
+            makeApiCall(token, docId, screenshot);
+        })
+        .catch(error => {
+            console.error('Auth Error:', error);
+        });
+}
+
+// Listener for the popup.js message
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.action === "insertIntoGoogleDoc") {
+        const { docId, screenshot } = message;
+        authenticateAndInsertIntoDoc(docId, screenshot);
+        sendResponse({ status: "success" });
     }
 });
 
